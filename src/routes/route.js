@@ -1,7 +1,6 @@
 const express=require("express")
 const router=express.Router()
-
-
+const collegeCont = require("../controllers/collegeController")
 
 
 router.get("/demo/:name",function(req,res){
@@ -10,6 +9,12 @@ router.get("/demo/:name",function(req,res){
     res.send("done")
 })
 
+
+
+
+
+
+router.post("/functionup/colleges", collegeCont.createCollege);
 
 
 
