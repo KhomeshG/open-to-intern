@@ -59,31 +59,31 @@ const getCollege=async function(req,res){
 
   try{
   const data=req.query
-  const {Name}=data
+  const {name}=data
  
   // check data is here and in data name should be
-  if(!data || !Name) return res.status(404).send({status:false,message:"Enter the college name in Name"})
-
+  if(!data || !name) return res.status(404).send({status:false,message:"Enter the college name in name"})
+ 
   //find college data with findOne and college model
-  let value=await collegeModel.findOne({Name:Name}).select({name:1,fullName:1,logoLink:1})
+  let value=await collegeModel.findOne({Name:name}).select({Name:1,fullName:1,logoLink:1})
  
  // check get any data or not
  if(!value ) return res.status(404).send({status:false,message:"college not exist"})
 
  // when get data then find internship from itnernship db and should be specific data use select
  const internsData=await internModel.find({collegeId:value._id}).select({name:1,email:1,mobile:1})
-
-  // check get internsData or not
+ 
+ // check get internsData or not
   if(internsData.length==0) return res.status(404).send({status:false,message:"no internship in this college"})
 
-  // no need _id now than delete _id from getData
-  // delete getData._id
- 
-  // add internsShip data in getData with interns key
+  // add internsShip data and value in the result with interns key
+
+  const { Name, fullName, logoLink } = value;  
+  const result = {Name, fullName, logoLink, internsData};
   
 
   // after successfull informesstion send data to user
-  res.status(200).send({status:true,data:p})
+  res.status(200).send({status:true,data:result})
   }
   catch(error){
     res.status(500).send({status:false,message:error.message})

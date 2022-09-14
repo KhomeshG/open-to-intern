@@ -25,6 +25,9 @@ const createIntern = async function (req, res) {
         if (!emailValid.test(requestbody.email)) {
             return res.status(400).send({ status: false, msg: "Enter valid email" })
         }
+        let checkEmail = await internModel.findOne({ eamil: requestbody.email })
+        if (checkEmail) {
+            return res.status(400).send({ status: false, msg: "this email is already reserved" })}
         if (!requestbody.mobile) {
             return res.status(400).send({ status: false, msg: "Please provide mobile no" })
         }
