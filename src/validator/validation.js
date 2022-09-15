@@ -3,12 +3,12 @@
 
 // for sort name
 const sortName=function(sortName){
-  if(/^([A-Za-z]{4,10})+$/.test(sortName)) return true
+  if(/^([A-Za-z]{2,10})+$/.test(sortName)) return true
   return false
 }
 // for personName
 const personName=function(name){
-  if(/^[A-Z a-z 0-9]{8,30}$/.test(name)) return true
+  if(/^[A-Za-z, 0-9]{8,80}$/.test(name)) return true
   return false
 }
 

@@ -20,10 +20,10 @@ const createCollege = async function (req, res) {
       if (!Name || !isValid.sortName(Name))
           return res.status(400).send({
             status: false,
-            message: "Name is required in a string format length should be 4 to 10",
+            message: "Name is required in a string format length should be 3 to 10",
        });
        const checkName=await collegeModel.findOne({Name:Name})
-       if(checkName) return res.status(400).send({status:false,message:"name has already rasistor"})
+       if(checkName) return res.status(400).send({status:false,message:"name has already ragistor"})
     
       // check full is valid or not 
       if (!fullName || !isValid.personName(fullName))
@@ -41,11 +41,11 @@ const createCollege = async function (req, res) {
   
        
       // resistor college
-      let alldata = await collegeModel.create(data)
+      let registor = await collegeModel.create(data)
       res.status(201).send({
         status: true,
         message:"college created succesfully",
-        data: alldata,
+        data: registor,
       });
 
 
@@ -62,16 +62,16 @@ const getCollege=async function(req,res){
 
   try{
   const data=req.query
-  const {name}=data
+  const {collegeName}=data
  
   // check data is here and in data name should be
-  if(!data || !name) return res.status(404).send({status:false,message:"Enter the college name in name"})
+  if(!data || !collegeName) return res.status(404).send({status:false,message:"Enter the college name in collegeName"})
 
   // check college name is valid
-  if(!isValid.sortName(name)) return res.status(400).send({status:false,message:"Enter name is string form length should be 4 to 10"})
+  if(!isValid.sortName(collegeName)) return res.status(400).send({status:false,message:"Enter collegeName is string form length should be 2 to 10"})
  
   //find college data with findOne and college model
-  let value=await collegeModel.findOne({Name:name}).select({Name:1,fullName:1,logoLink:1})
+  let value=await collegeModel.findOne({Name:collegeName}).select({Name:1,fullName:1,logoLink:1})
  
  // check get any data or not
  if(!value ) return res.status(404).send({status:false,message:"college not exist"})
