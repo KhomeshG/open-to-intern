@@ -1,46 +1,54 @@
 const { model } = require("mongoose");
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
-const { isValidBody,isValidName,isValidLink} = require("../validator/validation");
+const {isValid} = require("../validator/validation");
 
 
-
+// here registor college in the db
 const createCollege = async function (req, res) {
     try {
+      // get data  from body
       let data = req.body;
+      // destucture data
       let {  fullName,Name,logoLink, } = data;
-  
-      if (!isValidBody(data))
-        return res
-          .status(400)
-          .send({ status: false, message: "Request body cannot be empty" });
+      
+      // check there is data or not 
+      if (!isValid.body(data))
+        return res.status(400).send({ status: false, message: "Request body cannot be empty" });
 
-      if (!Name || !isValidName(Name))
+        // check Name is valid or not and should not reserved
+      if (!Name || !isValid.sortName(Name))
           return res.status(400).send({
             status: false,
-            message: "Name is required in a valid format",
+            message: "Name is required in a string format length should be 4 to 10",
        });
+       const checkName=await collegeModel.findOne({Name:Name})
+       if(checkName) return res.status(400).send({status:false,message:"name has already rasistor"})
     
-  
-      if (!fullName || !isValidName(fullName))
+      // check full is valid or not 
+      if (!fullName || !isValid.personName(fullName))
         return res.status(400).send({
           status: false,
           message: "fullName name is required in a valid format",
         });
-        if (!logoLink|| !isValidLink(logoLink))
+
+        // check link is valid or not 
+        if (!logoLink|| !isValid.link(logoLink))
         return res.status(400).send({
           status: false,
           message: "logoLink  is required in a valid format",
         });
   
        
-
+      // resistor college
       let alldata = await collegeModel.create(data)
       res.status(201).send({
         status: true,
         message:"college created succesfully",
         data: alldata,
       });
+
+
     } catch (error) {
       res.status(500).send({ status: false, message: error.message });
     }
@@ -48,11 +56,6 @@ const createCollege = async function (req, res) {
 
 
 
-
-//   //### GET /functionup/collegeDetails
-// - Returns the college details for the requested college (Expect a query parameter by the name `collegeName`. This is anabbreviated college name. For example `iith`)
-// - Returns the list of all interns who have applied for internship at this college.
-// - The response structure should look like [this](#college-details)
 
 
 const getCollege=async function(req,res){
@@ -63,6 +66,9 @@ const getCollege=async function(req,res){
  
   // check data is here and in data name should be
   if(!data || !name) return res.status(404).send({status:false,message:"Enter the college name in name"})
+
+  // check college name is valid
+  if(!isValid.sortName(name)) return res.status(400).send({status:false,message:"Enter name is string form length should be 4 to 10"})
  
   //find college data with findOne and college model
   let value=await collegeModel.findOne({Name:name}).select({Name:1,fullName:1,logoLink:1})
