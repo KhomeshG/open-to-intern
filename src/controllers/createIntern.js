@@ -45,20 +45,22 @@ const createIntern = async function (req, res) {
         }
 
         // check there is any collegeId in requestedbody if yes shoud be valid
-        if (!requestbody.collegeId) {
-            return res.status(400).send({ status: true, message: "Please provide college id" })
+        if (!requestbody.collegeName) {
+            return res.status(400).send({ status: true, message: "Please provide collegeName" })
         }
-        if (!mongoose.Types.ObjectId.isValid(requestbody.collegeId)) {
-            return res.status(400).send({ status: false, messege: "collegeId is not valid,please enter valid ID" })
+        if (!isValid.sortName(requestbody.collegeName)) {
+            return res.status(400).send({ status: false, messege: "collegeName is not valid,please enter valid collegeName" })
         }
-        let collegebyid = await collegeModel.findById({ _id: requestbody.collegeId })
-        if (!collegebyid) {
+        let collegebyName = await collegeModel.findOne({ Name: requestbody.collegeName })
+        if (!collegebyName) {
             return res.status(400).send({ status: false, messege: "college is not exist" })
         }
-
+        requestbody.collegeId=collegebyName._id
         // now resistor form
         let internCreated = await internModel.create(requestbody)
-        res.status(201).send({ data: internCreated })
+        const {name,email,mobile,collegeId,isDeleted}=internCreated
+        const output={name,email,mobile,collegeId,isDeleted}
+        res.status(201).send({ status:true,data:output })
     }
     catch (err) {
         res.status(500).send(err.message)
