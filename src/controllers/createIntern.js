@@ -44,22 +44,28 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, message: "this mobile number is already reserved" })
         }
 
-        // check there is any collegeId in requestedbody if yes shoud be valid
+        // check there is any collegeName in requestedbody if yes shoud be valid
         if (!requestbody.collegeName) {
             return res.status(400).send({ status: true, message: "Please provide collegeName" })
         }
         if (!isValid.sortName(requestbody.collegeName)) {
             return res.status(400).send({ status: false, messege: "collegeName is not valid,please enter valid collegeName" })
         }
-        let collegebyName = await collegeModel.findOne({ Name: requestbody.collegeName })
+        let collegebyName = await collegeModel.findOne({ Name: requestbody.collegeName }).select({_id:1})
+       
         if (!collegebyName) {
             return res.status(400).send({ status: false, messege: "college is not exist" })
         }
+        // add collegeId in requestbody 
         requestbody.collegeId=collegebyName._id
         // now resistor form
         let internCreated = await internModel.create(requestbody)
+
+        // destructured internCreated 
         const {name,email,mobile,collegeId,isDeleted}=internCreated
+        // structured in a object
         const output={name,email,mobile,collegeId,isDeleted}
+
         res.status(201).send({ status:true,data:output })
     }
     catch (err) {
