@@ -8,7 +8,7 @@ const sortName=function(sortName){
 }
 // for personName
 const personName=function(name){
-  if(/^[A-Za-z, 0-9]{8,80}$/.test(name)) return true
+  if(/^[A-Za-z, ]{8,80}$/.test(name)) return true
   return false
 }
 

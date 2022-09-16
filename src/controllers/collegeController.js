@@ -10,7 +10,7 @@ const createCollege = async function (req, res) {
       // get data  from body
       let data = req.body;
       // destucture data
-      let {  fullName,Name,logoLink, } = data;
+      let {  fullName,Name,logoLink } = data;
       
       // check there is data or not 
       if (!isValid.body(data))
@@ -42,11 +42,12 @@ const createCollege = async function (req, res) {
        
       // resistor college
       let registor = await collegeModel.create(data)
-      res.status(201).send({
-        status: true,
-        message:"college created succesfully",
-        data: registor,
-      });
+      const output={}
+       output.Name=registor.Name
+       output.fullName=registor.fullName
+       output.logoLink=registor.logoLink
+       output.isDeleted=registor.isDeleted
+      res.status(201).send({data: output});
 
 
     } catch (error) {
@@ -77,15 +78,15 @@ const getCollege=async function(req,res){
  if(!value ) return res.status(404).send({status:false,message:"college not exist"})
 
  // when get data then find internship from itnernship db and should be specific data use select
- const internsData=await internModel.find({collegeId:value._id}).select({name:1,email:1,mobile:1})
+ const interns=await internModel.find({collegeId:value._id}).select({name:1,email:1,mobile:1})
  
  // check get internsData or not
-  if(internsData.length==0) return res.status(404).send({status:false,message:"no internship in this college"})
+  if(interns.length==0) return res.status(404).send({status:false,message:"no internship in this college"})
 
   // add internsShip data and value in the result with interns key
 
   const { Name, fullName, logoLink } = value;  
-  const result = {Name, fullName, logoLink, internsData};
+  const result = {Name, fullName, logoLink, interns};
   
 
   // after successfull informesstion send data to user
