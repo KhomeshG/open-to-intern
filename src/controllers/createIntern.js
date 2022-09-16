@@ -10,7 +10,7 @@ const createIntern = async function (req, res) {
         let requestbody = req.body
 
         // check there is any data or not
-        if (Object.keys(requestbody).length == 0) return res.status(404).send({ status: false, message: "please enter data" })
+        if (Object.keys(requestbody).length == 0) return res.status(400).send({ status: false, message: "please enter data" })
 
         // check there is any name in data if yes check should be valid 
         if (!requestbody.name) {

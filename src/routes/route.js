@@ -8,8 +8,8 @@ router.get("/demo/:name",function(req,res){
     res.send("done")
 })
 router.post("/functionup/colleges", collegeCont.createCollege);
-router.post("/functionup/intern", internCont.createIntern)
+router.post("/functionup/interns", internCont.createIntern)
 router.get("/functionup/collegeDetails", collegeCont.getInternData);
-
+ 
 
 module.exports=router

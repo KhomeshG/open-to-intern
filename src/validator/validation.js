@@ -14,7 +14,7 @@ const personName=function(name){
 
 // for mobile number
 const mobile=function(mobile){
-  if(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(mobile)) return true
+  if(/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile)) return true
   return false
 }
 
