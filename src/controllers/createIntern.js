@@ -13,7 +13,7 @@ const createIntern = async function (req, res) {
         if (Object.keys(requestbody).length == 0) return res.status(400).send({ status: false, message: "please enter data" })
 
         // check there is any name in data if yes check should be valid 
-        if (!requestbody.name) {
+        if (!requestbody.name.trim()) {
             return res.status(400).send({ status: false, message: "provide name , it's mandatory" })
         }
         if (!isValid.personName(requestbody.name)) {
@@ -34,7 +34,7 @@ const createIntern = async function (req, res) {
 
         // check there is any mobile in data if yes check should be valid and not reserved
         if (!requestbody.mobile) {
-            return res.status(400).send({ status: false, message: "Please provide mobile no" })
+            return res.status(400).send({ status: false, message: "Please provide indian  mobile no" })
         }
         if (!isValid.mobile(requestbody.mobile)) {
             return res.status(400).send({ status: false, message: "Enter valid mobile" })
@@ -51,7 +51,7 @@ const createIntern = async function (req, res) {
         if (!isValid.sortName(requestbody.collegeName)) {
             return res.status(400).send({ status: false, messege: "collegeName is not valid,please enter valid collegeName" })
         }
-        let collegebyName = await collegeModel.findOne({ Name: requestbody.collegeName }).select({_id:1})
+        let collegebyName = await collegeModel.findOne({ name: requestbody.collegeName }).select({_id:1})
        
         if (!collegebyName) {
             return res.status(400).send({ status: false, messege: "college is not exist" })

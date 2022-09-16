@@ -10,6 +10,13 @@ router.get("/demo/:name",function(req,res){
 router.post("/functionup/colleges", collegeCont.createCollege);
 router.post("/functionup/interns", internCont.createIntern)
 router.get("/functionup/collegeDetails", collegeCont.getInternData);
+router.all("/**", function (req, res) {         
+    res.status(400).send({
+        status: false,
+        msg: "The api you request is not available"
+    })
+})
+
  
 
 module.exports=router

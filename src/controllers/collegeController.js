@@ -10,23 +10,24 @@ const createCollege = async function (req, res) {
       // get data  from body
       let data = req.body;
       // destucture data
-      let {  fullName,Name,logoLink } = data;
+      let {  fullName,name,logoLink } = data;
+            
       
       // check there is data or not 
       if (!isValid.body(data))
         return res.status(400).send({ status: false, message: "Request body cannot be empty" });
 
         // check Name is valid or not and should not reserved
-      if (!Name || !isValid.sortName(Name))
+      if (!name || !isValid.sortName(name))
           return res.status(400).send({
             status: false,
             message: "Name is required in a string format length should be 3 to 10",
        });
-       const checkName=await collegeModel.findOne({Name:Name})
+       const checkName=await collegeModel.findOne({name:name})
        if(checkName) return res.status(400).send({status:false,message:"name has already ragistor"})
     
       // check full is valid or not 
-      if (!fullName || !isValid.personName(fullName))
+      if (!fullName.trim() || !isValid.personName(fullName))
         return res.status(400).send({
           status: false,
           message: "fullName name is required in a valid format",
@@ -43,11 +44,11 @@ const createCollege = async function (req, res) {
       // resistor college
       let registor = await collegeModel.create(data)
       const output={}
-       output.Name=registor.Name
+       output.name=registor.name
        output.fullName=registor.fullName
        output.logoLink=registor.logoLink
        output.isDeleted=registor.isDeleted
-      res.status(201).send({data: output});
+      res.status(201).send({status:true,data: output});
 
 
     } catch (error) {
@@ -72,7 +73,7 @@ const getCollege=async function(req,res){
   if(!isValid.sortName(collegeName)) return res.status(400).send({status:false,message:"Enter collegeName is string form length should be 2 to 10"})
  
   //find college data with findOne and college model
-  let value=await collegeModel.findOne({Name:collegeName}).select({Name:1,fullName:1,logoLink:1})
+  let value=await collegeModel.findOne({name:collegeName}).select({name:1,fullName:1,logoLink:1})
  
  // check get any data or not
  if(!value ) return res.status(400).send({status:false,message:"college not exist"})
@@ -85,12 +86,12 @@ const getCollege=async function(req,res){
 
   // add internsShip data and value in the result with interns key
 
-  const { Name, fullName, logoLink } = value;  
-  const result = {Name, fullName, logoLink, interns};
+  const { name, fullName, logoLink } = value;  
+  const result = {name, fullName, logoLink, interns};
   
 
   // after successfull informesstion send data to user
-  res.status(201).send({status:true,data:result})
+  res.status(200).send({status:true,data:result})
   }
   catch(error){
     res.status(500).send({status:false,message:error.message})
