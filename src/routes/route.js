@@ -1,22 +1,30 @@
-const express=require("express")
-const router=express.Router()
-const collegeCont = require("../controllers/collegeController")
-const internCont = require("../controllers/createIntern")
-router.get("/demo/:name",function(req,res){
-    const a=req.params.name
-    console.log(a)
-    res.send("done")
-})
-router.post("/functionup/colleges", collegeCont.createCollege);
-router.post("/functionup/interns", internCont.createIntern)
-router.get("/functionup/collegeDetails", collegeCont.getInternData);
-router.all("/**", function (req, res) {         
-    res.status(400).send({
-        status: false,
-        msg: "The api you request is not available"
-    })
-})
+const express = require("express");
+const router = express.Router();
+const collegeController = require("../controllers/collegeController");
+const internCont = require("../controllers/internController");
 
- 
+//Testing All Working fine or not
+router.get("/demo/:name", function (req, res) {
+  const a = req.params.name;
+  console.log(a);
+  res.send("done");
+});
 
-module.exports=router
+//Create College API
+router.post("/functionup/colleges", collegeController.createCollege);
+
+//Create intern API
+router.post("/functionup/interns", internCont.createIntern);
+
+//Get collegeDetails API
+router.get("/functionup/collegeDetails", collegeController.collegeDetails);
+
+//For Wrong URl
+router.all("/**", function (req, res) {
+  res.status(400).send({
+    status: false,
+    msg: "Wrong Url",
+  });
+});
+
+module.exports = router;

@@ -1,20 +1,24 @@
-const  express=require("express")
-const bodyParser=require("body-parser")
-const  { default: mongoose } = require('mongoose');
+const express = require("express");
+//const express=require("body-parser")
+const { default: mongoose } = require("mongoose");
 
-const route=require("./routes/route.js")
-const app=express()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
-mongoose.connect("mongodb+srv://Ashish_Tripathi29:Ashish555@cluster0.bxcrqqa.mongodb.net/groupXDatabase",{
-    useNewUrlParser: true})
+const route = require("./routes/route.js");
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+mongoose
+  .connect(
+    "mongodb+srv://KhomeshUser-456:fttFkNqqiYu79Rgv@cluster0.aybauye.mongodb.net/groupXDatabase",
+    {
+      useNewUrlParser: true,
+    }
+  )
 
-.then( () => console.log("MongoDb is connected"))
-.catch ( err => console.log(err) )
+  .then(() => console.log("MongoDb is connected"))
+  .catch((err) => console.log(err));
 
-app.use('/', route);
- 
+app.use("/", route);
 
 app.listen(process.env.PORT || 3000, function () {
-    console.log('Express app running on port ' + (process.env.PORT || 3000))
+  console.log("Express app running on port " + (process.env.PORT || 3000));
 });
